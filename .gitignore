@@ -1,0 +1,35 @@
+# Abaqus / CAE working files (rebuildable from .inp)
+*.odb
+*.cae
+*.jnl
+*.rpy
+*.rpy.*
+*.sta
+*.msg
+*.dat
+*.prt
+*.sim
+*.com
+*.lck
+*.log
+*.023
+*.abq
+*.pac
+*.res
+*.stt
+*.mdl
+abaqus_acis.log
+# ANSYS / LS-DYNA bulk results
+*.rst
+*.wbpj
+*_files/
+d3plot*
+binout*
+# papers, datasheets, books (copyright): keep notes and citations only
+*.pdf
+# OS / editor
+.DS_Store
+Thumbs.db
+*.pyc
+__pycache__/
+.vscode/

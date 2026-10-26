@@ -1,0 +1,3 @@
+case_id,date,solver,step_time_s,platen_travel_mm,gap_top_mm,gap_bot_mm,avg_speed_mm_s,hc_elements,dt_scaled_s,mass_added_pct,peak_KE_mJ,KE_over_IE,status,notes
+T0p002_quick,2026-10-23,Abaqus/Explicit 2020,0.002,2.0,0,0,1000,24708,1.956e-7,4.519,7.85,~1.3 (read from plot),invalid,inertia-dominated; platens flush; 18 surface intersections
+T0p01_C2,2026-10-24,Abaqus/Explicit 2020,0.01,2.12,0.1,0.02,212,24708,2.0e-7,4.519,0.35,pending,completed,no surface intersections; ALLIE to be extracted
