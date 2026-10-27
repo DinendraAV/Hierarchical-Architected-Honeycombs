@@ -13,6 +13,8 @@ GAP_TOP    = 0.1         # mm, top platen to patch
 GAP_BOT    = 0.02        # mm, bottom platen to patch
 DATACHECK_ONLY = True    # True: only data check (seconds). False: run the analysis.
 WRITE_PLATENS = False    # True: also write platen motion to the ODB (untested; crashed CAE once)
+TAG = 'm033'              # added to the job name, e.g. 'm033' for the 0.33 mm mesh, so old results are not overwritten
+OVERWRITE = False        # False: refuse to run if an ODB with this job name already exists
 # -----------------------------------------------
 
 m = mdb.models[MODEL_NAME]
@@ -70,6 +72,12 @@ say('average speed  : %g mm/s' % (U2_TOTAL / T))
 
 # 4. job
 jname = 'T%s_C%s' % (('%g' % T).replace('.', 'p'), ('%g' % COMPRESS).replace('.', 'p'))
+if TAG:
+    jname = jname + '_' + TAG
+import os
+say('honeycomb elements in the model: %d' % len(a.instances['HC-1'].elements))
+if (not DATACHECK_ONLY) and (not OVERWRITE) and os.path.exists(os.path.join(os.getcwd(), jname + '.odb')):
+    raise Exception('%s.odb already exists in %s - set TAG to a new name (or OVERWRITE = True)' % (jname, os.getcwd()))
 if jname not in mdb.jobs.keys():
     mdb.Job(name=jname, objectToCopy=mdb.jobs[BASE_JOB])
 say('job: ' + jname + ('  (DATA CHECK ONLY)' if DATACHECK_ONLY else '  (FULL RUN)'))
