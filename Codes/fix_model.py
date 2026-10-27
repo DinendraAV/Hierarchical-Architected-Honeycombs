@@ -8,13 +8,14 @@ from mesh import *
 # ---------------- user settings ----------------
 MODEL_NAME = 'Model-1'
 JOB      = 'Job-1'
-T        = 0.002      # step time [s]            (use 0.002 for a quick test)
-DELTA    = 2.0      # platen travel [mm]       (use 2.0 with T = 0.002)
+T        = 0.02      # step time [s]            (use 0.002 for a quick test)
+DELTA    = 20.0      # platen travel [mm]       (use 2.0 with T = 0.002)
 DT_TARGET = 2.0e-7   # mass-scaling target dt [s]
 DEPTH_LAYERS = 6     # elements through the 10 mm depth
+INPLANE_SIZE = 0.5   # in-plane seed size [mm]; 0.33 gives 3 elements across a 1 mm wall, 0.25 gives 4
 CPUS     = 4
-RESEED   = False      # False = skip the mesh change
-ONLY_MESH = False     # True = run only the mesh step (the other blocks already ran OK)
+RESEED   = True      # False = skip the mesh change
+ONLY_MESH = True     # True = run only the mesh step (the other blocks already ran OK)
 # -----------------------------------------------
 
 m = mdb.models[MODEL_NAME]
@@ -114,7 +115,7 @@ def f9():
     if len(sel) == 0:
         raise Exception('no depth edges found - mesh left unchanged')
     a.deleteMesh(regions=(inst,))
-    a.seedPartInstance(regions=(inst,), size=0.5, deviationFactor=0.1,
+    a.seedPartInstance(regions=(inst,), size=INPLANE_SIZE, deviationFactor=0.1,
                        minSizeFactor=0.1)
     a.seedEdgeByNumber(edges=tuple(sel), number=DEPTH_LAYERS, constraint=FIXED)
     a.setMeshControls(regions=inst.cells, elemShape=HEX, technique=SWEEP)
