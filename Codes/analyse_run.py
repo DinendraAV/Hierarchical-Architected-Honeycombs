@@ -24,17 +24,24 @@ p.add_argument("--D", type=float, default=10.0, help="depth [mm]")
 p.add_argument("--mass-g", type=float, default=8.61154, help="patch mass [g] for specific energy")
 p.add_argument("--slope-window", type=float, nargs=2, default=[0.002, 0.004], help="strain window for the initial slope")
 p.add_argument("--sea-strain", type=float, default=0.03, help="strain for energy absorbed")
+p.add_argument("--axis", type=int, default=2, choices=[1, 2, 3], help="loaded axis: 1, 2 or 3 (U2/RF2 is axis 2)")
 a = p.parse_args()
 
 df = pd.read_csv(a.csv)
 
-# platen reference point: the region that has both U2 and RF2
-cand = [r for r, g in df.groupby("region") if {"U2", "RF2"} <= set(g["variable"])]
+# platen reference point: among regions with both U and RF on the loaded axis,
+# take the one that moves most (the driven top platen; the bottom one is fixed)
+UV, RV = "U%d" % a.axis, "RF%d" % a.axis
+cand = [r for r, g in df.groupby("region") if {UV, RV} <= set(g["variable"])]
 if not cand:
-    raise SystemExit("no region with both U2 and RF2 found")
-reg = cand[0]
-u = df[(df.region == reg) & (df.variable == "U2")].sort_values("time")
-f = df[(df.region == reg) & (df.variable == "RF2")].sort_values("time")
+    raise SystemExit("no region with both %s and %s found" % (UV, RV))
+def _travel(r):
+    g = df[(df.region == r) & (df.variable == UV)]
+    return float(np.abs(g["value"]).max()) if len(g) else 0.0
+reg = max(cand, key=_travel)
+print("platen region used: %s  (max |%s| = %.3f mm; %d candidate region(s))" % (reg, UV, _travel(reg), len(cand)))
+u = df[(df.region == reg) & (df.variable == UV)].sort_values("time")
+f = df[(df.region == reg) & (df.variable == RV)].sort_values("time")
 t = f["time"].to_numpy()
 U = np.abs(np.interp(t, u["time"], u["value"]))
 F = np.abs(f["value"].to_numpy())
