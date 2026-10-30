@@ -27,7 +27,7 @@ from job import *
 from sketch import *
 
 # ======================= SETTINGS (edit here only) =========================
-STEP_PATH   = r'C:\path\to\your_patch.STEP'   # <-- EDIT: full path of the STEP file of the current patch
+STEP_PATH   = r'C:\Users\Dino\Documents\GitHub\Hierarchical-Architected-Honeycombs\geometry\rhc\test1.STEP'   # <-- EDIT: full path of the STEP file of the current patch
 MODEL_NAME  = 'LongRun'
 PART_NAME   = 'HC'
 
@@ -56,8 +56,8 @@ GAP_BOT  = 0.05                # mm
 T        = 0.1                 # s, step time (average speed = travel / T)
 
 # platens
-PLATEN_SIZE = 75.0             # mm, square
-PLATEN_MESH = 7.5              # mm
+PLATEN_SIZE = 100.0             # mm, square
+PLATEN_MESH = 10              # mm
 
 # mesh
 INPLANE_SIZE = 0.5             # mm
