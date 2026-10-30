@@ -50,18 +50,18 @@ FRICTION = 0.3
 # loading
 # Diagnostic run (hourglass tests): COMPRESS = 5, T = 0.1  (about 51 mm/s average).
 # Long run to see the collapse:     COMPRESS = 20, T = 0.3 (about 67 mm/s average).
-COMPRESS = 5.0                 # mm of patch compression after contact
+COMPRESS = 20.0                # mm of patch compression after contact
 GAP_TOP  = 0.05                # mm
 GAP_BOT  = 0.05                # mm
-T        = 0.1                 # s, step time (average speed = travel / T)
+T        = 0.3                 # s, step time (average speed = travel / T)
 
 # platens
-PLATEN_SIZE = 100.0             # mm, square
-PLATEN_MESH = 10              # mm
+PLATEN_SIZE = 75.0             # mm, square
+PLATEN_MESH = 7.5              # mm
 
 # mesh
-INPLANE_SIZE = 0.5             # mm
-DEPTH_ELEMENT = 2.5            # mm, target element size through the depth (50 mm -> 20 layers, aspect ratio 5)
+INPLANE_SIZE = 0.25            # mm
+DEPTH_ELEMENT = 5.0            # mm, target element size through the depth (50 mm -> 20 layers, aspect ratio 5)
 DEPTH_LAYERS  = None           # None = depth / DEPTH_ELEMENT; or give an integer
 HOURGLASS     = 'ENHANCED'     # ENHANCED, RELAX_STIFFNESS, COMBINED, STIFFNESS or VISCOUS
 DT_TARGET    = 2.0e-7          # s, mass-scaling target
@@ -75,7 +75,7 @@ PLATENS_IN_ODB  = True         # True: field output on the whole model so the pl
                                # (Abaqus then prints harmless 'LE/S not available for R3D4' warnings)
 
 # job
-TAG            = 'd50_m050'    # goes into the job name
+TAG            = 'prod_m025'    # goes into the job name
 DATACHECK_ONLY = True          # True: data check only. False: full analysis.
 SUBMIT         = True          # False: only write the .inp
 OVERWRITE      = False         # False: refuse to run if the ODB already exists

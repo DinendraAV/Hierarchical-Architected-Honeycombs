@@ -1,0 +1,10 @@
+run                         : LR_T0p1_C5_d50_m050
+max ALLKE/ALLIE (IE>5% max) : 0.002   (limit 0.05)
+fraction of points <= 0.05  : 1.00
+max ALLAE/ALLIE             : 0.215   (limit 0.05)
+max |ETOTAL|/ALLIE          : 0.0001
+peak stress [MPa]           : 0.06088  at strain 0.0869
+initial slope [MPa] (0.002-0.004) : 0.815
+energy to strain 0.03 [mJ] : 55.477
+specific energy [J/kg]      : 1.663
+final strain                : 0.0869
