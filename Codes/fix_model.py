@@ -12,7 +12,7 @@ T        = 0.02      # step time [s]            (use 0.002 for a quick test)
 DELTA    = 20.0      # platen travel [mm]       (use 2.0 with T = 0.002)
 DT_TARGET = 2.0e-7   # mass-scaling target dt [s]
 DEPTH_LAYERS = 6     # elements through the 10 mm depth
-INPLANE_SIZE = 0.5   # in-plane seed size [mm]; 0.33 gives 3 elements across a 1 mm wall, 0.25 gives 4
+INPLANE_SIZE = 0.33   # in-plane seed size [mm]; 0.33 gives 3 elements across a 1 mm wall, 0.25 gives 4
 CPUS     = 4
 RESEED   = True      # False = skip the mesh change
 ONLY_MESH = True     # True = run only the mesh step (the other blocks already ran OK)
