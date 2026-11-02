@@ -35,7 +35,7 @@ from job import *
 from sketch import *
 
 # ======================= SETTINGS (edit here only) =========================
-STEP_PATH  = r'C:\Users\Dinendra\Documents\GitHub\Hierarchical-Architected-Honeycombs\geometry\rhc\test1.STEP'
+STEP_PATH  = r'C:\Users\Dino\Documents\GitHub\Hierarchical-Architected-Honeycombs\geometry\rhc\test1.STEP'
 PART_NAME  = 'HC'
 SAVE_NAME  = 'Strain35'              # the .cae written to the work directory
 
