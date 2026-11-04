@@ -46,7 +46,7 @@ EXPECT_LOAD_EXTENT = 57.18           # mm, loaded dimension
 EXPECT_DEPTH       = 50.0            # mm
 
 # loading
-END_STRAIN = 28.59 / 57.18            # nominal strain at the end of the step (28.59 mm of 57.18 mm = 50.0 %)
+END_STRAIN = 20.013 / 57.18            # nominal strain at the end of the step (20.013 mm of 57.18 mm = 35.0 %)
 AVG_SPEED  = 50.25                   # mm/s, average platen speed: 20.1 mm in 0.4 s (the smooth step peaks at 1.875 times this)
 GAP_TOP    = 0.05                    # mm
 GAP_BOT    = 0.05                    # mm
@@ -69,7 +69,7 @@ PLATEN_SIZE = 75.0                   # mm, square
 PLATEN_MESH = 7.5                    # mm
 
 # solver
-DT_TARGET         = 1.0e-7           # s, mass-scaling target. None = no mass scaling
+DT_TARGET         = 5.0e-8           # s, mass-scaling target. None = no mass scaling
 CPUS              = 4
 RESTART_INTERVALS = 40               # restart states written per step. 0 = leave the restart request unchanged
 
