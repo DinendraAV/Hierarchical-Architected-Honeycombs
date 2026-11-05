@@ -9,8 +9,9 @@ Geometry (pointy-top hexagons, load along y, origin at bottom-left):
   - T  : wall thickness between neighbouring holes, mm
   - pitch = D + T
   - NX : holes in the even rows (odd rows have NX-1), NY : number of rows (odd)
-  - Even rows start at x = pitch/2; odd rows start at x = pitch.
-  - Left/right edges follow the wall centrelines (boundary walls are T/2 thick).
+  - Even rows start at x = pitch/2 + T/2; odd rows start at x = pitch + T/2.
+  - Left/right edges are the wall centrelines offset outward by T/2, so every
+    wall, boundary walls included, is T thick. Width = NX*pitch + T.
   - Top and bottom are cut flat through the hole centres of the first and last row,
     leaving half-hole notches open to the platens.
   - Hole corners are filleted with radius R_FILLET. The two cut corners of each
@@ -103,19 +104,21 @@ def build_loops(d=D, t=T, r=R_FILLET, nx=NX, ny=NY):
     rh = d / math.sqrt(3.0)             # hole circumradius
     hx = d / 2.0                        # hole half-width across flats
     row_pitch = 1.5 * big_r
-    width = nx * pitch
+    o = t / 2.0                         # outward offset of the boundary from the wall centreline
+    delta = o / math.sqrt(3.0)          # mitre shift along y of the offset zigzag (o * tan 30)
+    width = nx * pitch + t
     height = (ny - 1) * row_pitch
-    even_x = [pitch / 2.0 + i * pitch for i in range(nx)]
-    odd_x = [pitch + i * pitch for i in range(nx - 1)]
+    even_x = [pitch / 2.0 + o + i * pitch for i in range(nx)]
+    odd_x = [pitch + o + i * pitch for i in range(nx - 1)]
 
-    # left edge, going up
+    # left edge, going up (wall centreline zigzag offset outward by o, then shifted by +o in x)
     left = [(0.0, 0.0)]
     for j in range(0, ny - 1, 2):
         cy = j * row_pitch
-        left += [(0.0, cy + big_r / 2.0),
-                 (pitch / 2.0, cy + big_r),
-                 (pitch / 2.0, cy + 2.0 * big_r),
-                 (0.0, cy + 2.5 * big_r)]
+        left += [(0.0, cy + big_r / 2.0 + delta),
+                 (pitch / 2.0, cy + big_r + delta),
+                 (pitch / 2.0, cy + 2.0 * big_r - delta),
+                 (0.0, cy + 2.5 * big_r - delta)]
     left.append((0.0, height))
     right = [(width - x, y) for (x, y) in left]
 
