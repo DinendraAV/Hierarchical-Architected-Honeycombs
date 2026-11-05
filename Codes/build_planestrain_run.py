@@ -56,7 +56,8 @@ GAP_BOT  = 0.0                  # mm, 0 = bottom platen starts touching (keeps t
 # platens: discrete rigid wires. The wire direction fixes the contact normal (see make_platen).
 PLATEN_MARGIN = 5.0             # mm, platen overhang on each side of the patch
 PLATEN_MESH   = 2.0             # mm
-FLIP_PLATEN   = False           # True: reverse both wires if the platens face away from the patch
+FLIP_PLATEN   = True            # True: reverse both wires. Set after the data check reported 24 facets
+                                # facing the wrong way for (S_HC, S_PBOT); the .dat scan at the end re-tests it
 
 # mesh and element: 'CPE4' (plane strain, full integration), 'CPE4H', 'CPE4I' or 'CPE4R'
 INPLANE_SIZE = 0.25             # mm
@@ -328,15 +329,22 @@ run('contact: honeycomb self-contact and two platen pairs, friction %g, hard nor
 
 # ---- 9. output requests ------------------------------------------------------------------------
 def b_output():
-    m.fieldOutputRequests['F-Output-1'].setValues(variables=('S', 'LE', 'U', 'RF'),
-                                                  numIntervals=FIELD_INTERVALS)
+    # S and LE do not exist for the R2D2 platen elements, so they are requested on the
+    # honeycomb only. U and RF stay model-wide. timeMarks=OFF removes the "exact time points"
+    # note, which can force extra small increments.
+    m.fieldOutputRequests['F-Output-1'].setValues(variables=('U', 'RF'),
+                                                  numIntervals=FIELD_INTERVALS, timeMarks=OFF)
+    m.FieldOutputRequest(name='F-Output-HC', createStepName='Step-1',
+                         region=a.instances['HC-1'].sets['HC_FACES'], variables=('S', 'LE'),
+                         numIntervals=FIELD_INTERVALS, timeMarks=OFF,
+                         sectionPoints=DEFAULT, rebar=EXCLUDE)
     m.historyOutputRequests['H-Output-1'].setValues(
         variables=('ALLAE', 'ALLIE', 'ALLKE', 'ALLSD', 'ALLWK', 'ETOTAL'),
-        numIntervals=HIST_INTERVALS)
+        numIntervals=HIST_INTERVALS, timeMarks=OFF)
     for tag in ('TOP', 'BOT'):
         m.HistoryOutputRequest(name='H-Output-' + tag, createStepName='Step-1',
             region=a.sets['RP_' + tag], variables=('U1', 'U2', 'RF1', 'RF2'),
-            numIntervals=HIST_INTERVALS, sectionPoints=DEFAULT, rebar=EXCLUDE)
+            numIntervals=HIST_INTERVALS, timeMarks=OFF, sectionPoints=DEFAULT, rebar=EXCLUDE)
 run('output requests (energies incl. ALLSD, platen U and RF, field output)', b_output)
 
 
@@ -364,6 +372,28 @@ def b_job():
     if SUBMIT:
         j.submit(consistencyChecking=OFF, datacheckJob=DATACHECK_ONLY)
         j.waitForCompletion()
+        scan_dat(jname)
+
+
+def scan_dat(name):
+    """Print the contact orientation warnings found in the .dat file, if any."""
+    path = os.path.join(os.getcwd(), name + '.dat')
+    if not os.path.exists(path):
+        print('      (no %s.dat found to scan)' % name)
+        return
+    f = open(path)
+    try:
+        lines = f.read().splitlines()
+    finally:
+        f.close()
+    hits = [ln.strip() for ln in lines if 'wrong direction' in ln.lower()]
+    if hits:
+        print('      ORIENTATION WARNINGS STILL PRESENT in %s.dat:' % name)
+        for ln in hits[:5]:
+            print('        ' + ln)
+        print('      -> set FLIP_PLATEN = %s and rerun.' % (not FLIP_PLATEN))
+    else:
+        print('      no "wrong direction" facet warnings in %s.dat' % name)
 run('job %s (%s)' % (jname, 'DATA CHECK ONLY' if DATACHECK_ONLY else 'FULL RUN'), b_job)
 
 print('')
