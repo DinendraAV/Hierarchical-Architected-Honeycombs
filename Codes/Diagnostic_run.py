@@ -37,7 +37,7 @@ from sketch import *
 # ======================= SETTINGS (edit here only) =========================
 STEP_PATH  = r'C:\Users\Dino\Documents\GitHub\Hierarchical-Architected-Honeycombs\geometry\rhc\test1.STEP'
 PART_NAME  = 'HC'
-SAVE_NAME  = 'Strain35'              # the .cae written to the work directory
+SAVE_NAME  = 'Strain15_C3D8R_5mm'              # the .cae written to the work directory
 
 # Axes of the STEP file.
 LOAD_AXIS          = 'AUTO'          # 'X', 'Y', 'Z' or 'AUTO'
@@ -46,13 +46,13 @@ EXPECT_LOAD_EXTENT = 57.18           # mm, loaded dimension
 EXPECT_DEPTH       = 50.0            # mm
 
 # loading
-END_STRAIN = 20.013 / 57.18            # nominal strain at the end of the step (20.013 mm of 57.18 mm = 35.0 %)
-AVG_SPEED  = 50.25                   # mm/s, average platen speed: 20.1 mm in 0.4 s (the smooth step peaks at 1.875 times this)
+END_STRAIN = 8.577 / 57.18            # nominal strain at the end of the step (8.577 mm of 57.18 mm = 15.0 %)
+AVG_SPEED  = 8.333                   # mm/s, average platen speed: 500mm/min = 8.333 mm/s, 1000mm/min = 16.667 mm/s
 GAP_TOP    = 0.05                    # mm
 GAP_BOT    = 0.05                    # mm
 
 # mesh
-INPLANE_SIZE = 0.25                  # mm
+INPLANE_SIZE = 0.5                  # mm
 DEPTH_LAYERS = 1
 PLANE_STRAIN = True                  # fixes the depth displacement of every honeycomb node
 HOURGLASS    = 'ENHANCED'            # ENHANCED, RELAX_STIFFNESS, COMBINED, STIFFNESS or VISCOUS
@@ -69,7 +69,7 @@ PLATEN_SIZE = 75.0                   # mm, square
 PLATEN_MESH = 7.5                    # mm
 
 # solver
-DT_TARGET         = 5.0e-8           # s, mass-scaling target. None = no mass scaling
+DT_TARGET         = 1.0e-7           # s, mass-scaling target. None = no mass scaling
 CPUS              = 4
 RESTART_INTERVALS = 40               # restart states written per step. 0 = leave the restart request unchanged
 
@@ -149,7 +149,7 @@ def patch_restart(jname):
 
 
 # ---- 1. model and geometry -------------------------------------------------
-MODEL_NAME = 'S35_m%s_L%d' % (('%g' % INPLANE_SIZE).replace('.', 'p'), DEPTH_LAYERS)
+MODEL_NAME = 'S15_m%s_L%d' % (('%g' % INPLANE_SIZE).replace('.', 'p'), DEPTH_LAYERS)
 
 
 def b_model():
@@ -407,7 +407,7 @@ def b_job():
     patch_restart(jname)
 run('job %s (input file%s)' % (jname, ' and data check' if SUBMIT_DATACHECK else ''), b_job)
 
-bat = os.path.join(os.getcwd(), 'run_strain35.bat')
+bat = os.path.join(os.getcwd(), 'run_strain15.bat')
 f = open(bat, 'w')
 f.write('@echo off\n')
 f.write('cd /d "%s"\n' % os.getcwd())
@@ -437,4 +437,4 @@ print('analyse_run.py args: --H %.3f --W %.3f --D %.3f --gaps %.3f --axis %d%s -
          (' --mass-g %.3f' % (mass_t * 1.0e6)) if mass_t is not None else '', 0.9 * END_STRAIN))
 print('batch file         : %s' % bat)
 print('NEXT: check the data-check .sta and .dat (PERCENT CHNG MASS, warnings), then in an Abaqus Command window:')
-print('      start "abaqus strain35" /min cmd /c run_strain35.bat')
+print('      start "abaqus strain15" /min cmd /c run_strain15.bat')
