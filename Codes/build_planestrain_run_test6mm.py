@@ -46,11 +46,11 @@ DEPTH      = 1.0                # mm, plane strain thickness (forces are per thi
 E_MPA = 67.0
 NU    = 0.49
 RHO   = 1.22e-9                 # tonne/mm^3
-FRICTION = 0.
+FRICTION = 0.35
 
 # loading (quasi-static)
 SPEED_MM_MIN = 5.0              # mm/min platen speed  (5 mm/min = 0.08333 mm/s)
-COMPRESS = 20.0                  # TEST RUN: 6 mm covers the buckling region (stall began near 3.8 mm). Set 20.0 for the full run
+COMPRESS = 25.0                  # TEST RUN: 6 mm covers the buckling region (stall began near 3.8 mm). Set 20.0 for the full run
 GAP_TOP  = 0.05                 # mm, initial clearance below the top platen
 GAP_BOT  = 0.0                  # mm, 0 = bottom platen starts touching (keeps the patch supported)
 

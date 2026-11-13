@@ -59,8 +59,17 @@ def ratio(a, b):
     return a / b
 
 
+def out_names(reg):
+    """Names of the history outputs of a region, as a plain list."""
+    return list(reg.historyOutputs.keys())
+
+
 def get_series(reg, name):
-    data = reg.historyOutputs[name].data
+    ho = reg.historyOutputs
+    if name not in out_names(reg):
+        raise Exception("history output '%s' not in this region; it has: %s"
+                        % (name, ', '.join(out_names(reg))))
+    data = ho[name].data
     return [float(p[0]) for p in data], [float(p[1]) for p in data]
 
 
@@ -73,13 +82,18 @@ def main():
 
     # --- the two platen reference points: the driven one has the larger displacement
     cands = []
-    for key, reg in step.historyRegions.items():
-        ho = reg.historyOutputs
-        if ('U' + ax) in ho and ('RF' + ax) in ho:
+    print('history regions in %s:' % STEP)
+    for key in step.historyRegions.keys():
+        print('  %-32s %s' % (key, ', '.join(out_names(step.historyRegions[key]))))
+    for key in step.historyRegions.keys():
+        reg = step.historyRegions[key]
+        ks = out_names(reg)
+        if ('U' + ax) in ks and ('RF' + ax) in ks:
             tt, uu = get_series(reg, 'U' + ax)
             cands.append((abs(uu[-1]), key, reg))
     if len(cands) < 2:
-        raise Exception('expected two reference points with U%s and RF%s, found %d' % (ax, ax, len(cands)))
+        raise Exception('expected two reference points with U%s and RF%s, found %d (see the list above)'
+                        % (ax, ax, len(cands)))
     cands.sort(key=lambda c: -c[0])
     top_key, top = cands[0][1], cands[0][2]
     bot_key, bot = cands[1][1], cands[1][2]
@@ -96,7 +110,7 @@ def main():
     if akeys:
         reg = step.historyRegions[akeys[0]]
         for name in ('ALLIE', 'ALLKE', 'ALLAE', 'ALLSD', 'ALLWK', 'ETOTAL'):
-            if name in reg.historyOutputs:
+            if name in out_names(reg):
                 en[name] = get_series(reg, name)
     n_bad = 0
     for name in en:
@@ -126,13 +140,18 @@ def main():
         ft = f_top[i]
         fb = interp(tb, f_bot, tm)
         stress = abs(ft) / (W * DEPTH)                  # MPa (force for DEPTH is per mm of depth)
+        cum_prev = cum
+        eps_prev = rows[-1][2] if rows else 0.0
         cum += 0.5 * (abs(ft) + prev_f) * (comp - prev_d) if i > 0 else 0.0
         prev_d, prev_f = comp, abs(ft)
         ie, ke, ae = e_at('ALLIE', tm), e_at('ALLKE', tm), e_at('ALLAE', tm)
         sd, wk, et = e_at('ALLSD', tm), e_at('ALLWK', tm), e_at('ETOTAL', tm)
         for lv in STRAIN_LEVELS:
             if lv not in e_at_strain and eps >= lv:
-                e_at_strain[lv] = cum
+                # interpolate to the exact strain level (output points are ~0.17 % strain apart, and
+                # taking the first point past the level overestimates the energy by up to ~3 %)
+                fr = (lv - eps_prev) / (eps - eps_prev) if eps > eps_prev else 1.0
+                e_at_strain[lv] = cum_prev + fr * (cum - cum_prev)
         rows.append((tm, u_top[i], eps, ft, fb, ft + fb, stress, ie, ke, ae, sd, wk, et,
                      ratio(ke, ie), ratio(ae, ie), ratio(sd, ie),
                      cum, cum / (W * H * DEPTH), cum / (MASS_T * 1.0e6) / 1000.0))
