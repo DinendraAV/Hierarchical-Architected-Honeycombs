@@ -22,8 +22,8 @@ ODB_PATH = 'PS_v5_C6_dqs_m025.odb'   # used only when no command-line argument i
 STEP = 'Step-1'
 HC = 'HC-1'               # honeycomb instance name
 AXIS = 2                  # 2: load along Y (U2, RF2); 1: load along X
-H = 57.1577               # mm, patch height along the load axis (RP top - gap, from the .dat)
-W = 56.0                  # mm, patch width (5 * 11 + 1)
+H = 59.2               # mm, patch height along the load axis (RP top - gap, from the .dat)
+W = 56.6                  # mm, patch width (5 * 11 + 1)
 DEPTH = 1.0               # mm, plane strain depth
 GAP_TOP = 0.05            # mm, initial gap below the top platen
 MASS_T = 6.9541739e-07    # tonne, honeycomb mass from the .dat (for DEPTH = 1 mm)

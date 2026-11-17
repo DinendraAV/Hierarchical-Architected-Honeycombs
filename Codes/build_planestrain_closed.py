@@ -37,8 +37,8 @@ MODEL_NAME = 'PlaneStrain_CLOSED'   # base name of the NEW model. An existing mo
 PART_NAME  = 'ClosedCore'
 
 # lattice geometry (mm), pointy-top hexagons, load along Y, origin at the bottom-left of the LATTICE
-D        = 10.0                 # hole distance across flats
-T        = 1.0                  # wall thickness
+D        = 9.393                 # hole distance across flats
+T        = 1.608                  # wall thickness
 R_FILLET = 0.5                  # hole corner fillet; the two corners where a notch meets a plate stay sharp
 NX       = 5                    # holes in the even rows (odd rows have NX-1)
 NY       = 7                    # rows, must be odd
