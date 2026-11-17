@@ -55,7 +55,7 @@ RHO   = 1.22e-9                 # tonne/mm^3
 
 # contact: the same setup as build_planestrain_run.py (one property for all pairs: penalty friction, hard normal)
 FRICTION = 0.3                  # honeycomb self-contact and platen contact (0.3 as in the completed 0.5 and 0.25 mm runs)
-PLATEN_LINK = 'FINGERS'         # how the platens act on the plates:
+PLATEN_LINK = 'TIE'         # how the platens act on the plates:
                                 # 'FINGERS': friction contact, but ONLY over the 6 finger segments of each plate face
                                 #            (the skin over the holes carries no force and is left out of the contact)
                                 #            GAP_TOP / GAP_BOT may be > 0 (0.05 as in the open-core runs).
@@ -68,7 +68,7 @@ PLATEN_LINK = 'FINGERS'         # how the platens act on the plates:
 # loading (quasi-static)
 SPEED_MM_MIN = 5.0              # mm/min platen speed  (5 mm/min = 0.08333 mm/s)
 COMPRESS = 30.0                 # mm of compression after contact
-GAP_TOP  = 0.05                 # mm, initial clearance between the top plate and the top platen (as in the open-core
+GAP_TOP  = 0.0                # mm, initial clearance between the top plate and the top platen (as in the open-core
                                 # runs). PLATEN_LINK = 'TIE' needs 0.
 GAP_BOT  = 0.0                  # mm, 0 = bottom platen starts touching the bottom plate
 
@@ -95,7 +95,7 @@ FIELD_INTERVALS = 100
 HIST_INTERVALS  = 400
 
 # job
-TAG            = 'cls_m05'
+TAG            = 'tie_t161_m05'
 CPUS           = 4
 DATACHECK_ONLY = True           # True: data check only. False: full analysis.
 SUBMIT         = True           # False: only write the .inp

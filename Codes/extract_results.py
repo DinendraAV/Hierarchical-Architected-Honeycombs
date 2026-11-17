@@ -22,10 +22,10 @@ ODB_PATH = 'PS_v5_C6_dqs_m025.odb'   # used only when no command-line argument i
 STEP = 'Step-1'
 HC = 'HC-1'               # honeycomb instance name
 AXIS = 2                  # 2: load along Y (U2, RF2); 1: load along X
-H = 59.2               # mm, patch height along the load axis (RP top - gap, from the .dat)
-W = 56.6                  # mm, patch width (5 * 11 + 1)
+H = 57.1577               # mm, patch height along the load axis (RP top - gap, from the .dat)
+W = 56.608                  # mm, patch width (5 * 11 + 1)
 DEPTH = 1.0               # mm, plane strain depth
-GAP_TOP = 0.05            # mm, initial gap below the top platen
+GAP_TOP = 0.0            # mm, initial gap below the top platen
 MASS_T = 6.9541739e-07    # tonne, honeycomb mass from the .dat (for DEPTH = 1 mm)
 STRAIN_LEVELS = (0.05, 0.10, 0.20, 0.30)   # energy absorption is reported up to these strains
 BAD = 1.0e20              # history values above this are treated as garbage
