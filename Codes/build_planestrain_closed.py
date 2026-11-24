@@ -86,7 +86,7 @@ STEP_TYPE   = 'DYNAMIC_QS'
 STABILIZE   = True              # STATIC only: automatic stabilization (damping)
 STAB_FACTOR = 2.0e-4            # STATIC only: damping factor magnitude (Abaqus default)
 INIT_FRAC   = 1.0e-3            # initial increment as a fraction of the step time
-MAX_FRAC    = 5.0e-3            # maximum increment as a fraction of the step time
+MAX_FRAC    = 1.0e-3            # maximum increment as a fraction of the step time
 MIN_FRAC    = 1.0e-9
 MAX_NUM_INC = 20000
 
@@ -95,10 +95,10 @@ FIELD_INTERVALS = 100
 HIST_INTERVALS  = 400
 
 # job
-TAG            = 'tie_t161_m05'
+TAG            = 'tie_t161_ctrl_12'
 CPUS           = 4
 DATACHECK_ONLY = True           # True: data check only. False: full analysis.
-SUBMIT         = True           # False: only write the .inp
+SUBMIT         = False           # False: only write the .inp
 SAVE_CAE       = True           # save the database as MODEL_NAME in the work directory
 # ===========================================================================
 
